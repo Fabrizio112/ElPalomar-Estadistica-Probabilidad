@@ -16,7 +16,7 @@ function NavBar({ setActiveTab, activeTab }: NavBarProps) {
                 <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex-1 px-6 py-4 font-semibold flex items-center justify-center gap-2 transition-all ${activeTab === tab.id
+                    className={`flex-1 px-6 py-4 font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${activeTab === tab.id
                         ? 'bg-blue-600 text-white'
                         : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                         }`}
