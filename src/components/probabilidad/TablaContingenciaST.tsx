@@ -24,16 +24,17 @@ function TablaContingenciaST({ registros, socios }: TablaContingenciaSTProps) {
                         type Sexo = 'M' | 'F';
                         type Turno = 'M' | 'T' | 'N';
                         const tabla: Record<Sexo, Record<Turno, number>> = { M: { M: 0, T: 0, N: 0 }, F: { M: 0, T: 0, N: 0 } };
+
+                        registros.forEach(r => {
+                            const s = socios.find(so => so.id === r.socio);
+                            if (s) tabla[s.sexo as Sexo][r.turno as Turno]++;
+                        });
                         const totales = {
                             M: tabla.M.M + tabla.F.M,
                             T: tabla.M.T + tabla.F.T,
                             N: tabla.M.N + tabla.F.N
                         };
-                        registros.forEach(r => {
-                            const s = socios.find(so => so.id === r.socio);
-                            if (s) tabla[s.sexo as Sexo][r.turno as Turno]++;
-                        });
-                        return (['M', 'F'] as const).map((sexo, idx) => (
+                        const filasData = (['M', 'F'] as const).map((sexo, idx) => (
                             <>                            <tr key={sexo} className={idx % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
                                 <td className="p-3 font-semibold">{sexo === 'M' ? 'Masculino' : 'Femenino'}</td>
                                 <td className="p-3 text-center">{tabla[sexo].M}</td>
@@ -41,6 +42,12 @@ function TablaContingenciaST({ registros, socios }: TablaContingenciaSTProps) {
                                 <td className="p-3 text-center">{tabla[sexo].N}</td>
                                 <td className="p-3 text-center font-bold">{tabla[sexo].M + tabla[sexo].T + tabla[sexo].N}</td>
                             </tr>
+                            </>
+
+                        ));
+                        return (
+                            <>
+                                {filasData}
                                 <tr className="bg-green-100 font-bold">
                                     <td className="p-3">Total</td>
                                     <td className="p-3 text-center">{totales.M}</td>
@@ -48,9 +55,7 @@ function TablaContingenciaST({ registros, socios }: TablaContingenciaSTProps) {
                                     <td className="p-3 text-center">{totales.N}</td>
                                     <td className="p-3 text-center">{registros.length}</td>
                                 </tr>
-                            </>
-
-                        ));
+                            </>)
                     })()}
 
                 </tbody>
